@@ -1,4 +1,4 @@
-use actix_web::{web, App, HttpServer, Responder, HttpResponse};
+use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 
 async fn create_post() -> impl Responder {
     HttpResponse::Created().body("Post created")
@@ -18,6 +18,8 @@ async fn delete_post() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    println!("Starting server on 127.0.0.1:8081");
+
     HttpServer::new(|| {
         App::new()
             .route("/posts", web::post().to(create_post))
@@ -25,7 +27,7 @@ async fn main() -> std::io::Result<()> {
             .route("/posts/{id}", web::put().to(update_post))
             .route("/posts/{id}", web::delete().to(delete_post))
     })
-    .bind("127.0.0.1:8081")?
+    .bind("localhost:8081")?
     .run()
     .await
 }
